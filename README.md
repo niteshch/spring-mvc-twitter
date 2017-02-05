@@ -8,6 +8,11 @@ Following operations are exposed by this service:
 3. An endpoint to start following another user.
 4. An endpoint to unfollow another user.
 
+# Pre-requisites
+1. Java 8
+2. Tomcat 8
+3. MySQL
+
 # Setup
 - Use the `twitter_output.sql` file to import the MySQL dump of twitter data.
 
