@@ -39,4 +39,4 @@ Following operations are exposed by this service:
 
 - Deploy the generated war file to the tomcat server.
 
-- Once deployed, the details of API can be found at [http://<server_url>/<context_root>/swagger-ui.html]([http://<server_url>/<context_root>/swagger-ui.html])
+- Once deployed, the details of API can be found at [http://server_url/context_root/swagger-ui.html](http://server_url/context_root/swagger-ui.html)
