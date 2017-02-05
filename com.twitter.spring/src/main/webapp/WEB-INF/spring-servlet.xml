@@ -35,9 +35,10 @@
 		<constructor-arg ref="dataSource"/>
 	</bean>
 	
-	<security:http auto-config='true'>
+	<security:http auto-config='true' create-session='stateless'>
 	     <security:intercept-url pattern="/user/**" access="hasRole('ROLE_ADMIN')"/>
 	     <security:http-basic />
+	     <security:csrf disabled='true'/>
 	</security:http>
 	
 	<security:authentication-manager>
