@@ -15,25 +15,26 @@ Following operations are exposed by this service:
 
 ```
 <security:authentication-manager>
-	     <security:authentication-provider>
-	         <security:user-service>
-	              <security:user name="john" password="doe" authorities="ROLE_USER, ROLE_ADMIN" />
-	              </security:user-service>
-	     </security:authentication-provider>
-	</security:authentication-manager>
-  ```
+     <security:authentication-provider>
+	 <security:user-service>
+	      <security:user name="john" password="doe" authorities="ROLE_USER, ROLE_ADMIN" />
+	      </security:user-service>
+     </security:authentication-provider>
+</security:authentication-manager>
+```
   
 - Update the database details in the `spring-servlet.xml` before deploying the service.
   
-  ```
-  <bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/twitter" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
-	</bean>
-  ```
+```
+<bean id="dataSource"
+	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	<property name="url" value="jdbc:mysql://localhost:3306/twitter" />
+	<property name="username" value="root" />
+	<property name="password" value="root" />
+</bean>
+```
+
 - Build the project using Maven.
 
 - Deploy the generated war file to the tomcat server.
