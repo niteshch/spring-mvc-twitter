@@ -10,16 +10,31 @@ import org.springframework.stereotype.Component;
 import com.twitter.spring.dao.AppDAO;
 import com.twitter.spring.model.TwitterUser;
 
+
+/**
+ * Service to interact with the DAO layer and perform 
+ * required transformations before returning data to the controller.
+ * 
+ * @author niteshch
+ *
+ */
 @Component
 public class TwitterService {
 	
 	@Autowired
-	private AppDAO<TwitterUser, String> twitterUserDAOImpl;
+	private AppDAO<TwitterUser> twitterUserDAOImpl;
 	
-	public void setTwitterUserDAOImpl(AppDAO<TwitterUser, String> twitterUserDAOImpl) {
+	public void setTwitterUserDAOImpl(AppDAO<TwitterUser> twitterUserDAOImpl) {
 		this.twitterUserDAOImpl = twitterUserDAOImpl;
 	}
 	
+	/**
+	 * Fetch the user from DAO layer by <code>username</code>.
+	 * If no user is found, <code>null</code> is returned.
+	 * 
+	 * @param username - The username of the twitter user.
+	 * @return {@link TwitterUser} object.
+	 */
 	public TwitterUser getUser(String username){
 		String findUserByUsername = "select * from user where username = :username";
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -28,6 +43,15 @@ public class TwitterService {
 		return twitterUser;
 	}
 	
+	/**
+	 * Fetch the twitter feed of the user. The service queries the database for tweets of the user
+	 * and the tweets of users being followed by the user as specified by the username.
+	 * If a <code>searchQuery</code> is provided, the tweets are filtered based on the term provided.
+	 * 
+	 * @param username - The username of the user.
+	 * @param searchQuery - The search query used to filter the tweets.
+	 * @return {@link TwitterUser} object.
+	 */
 	public TwitterUser getUserFeed(String username, String searchQuery){
 		String userSQL = "select t1.user_id, t1.username, t1.name, t1.create_dt, t1.update_dt, t2.tweet_id, t2.tweet_text, "
 				+ "t2.latitude, t2.longitude, t2.create_dt as tweet_create_dt, t2.update_dt as tweet_update_dt "
@@ -56,6 +80,12 @@ public class TwitterService {
 		return twitterUser;
 	}
 
+	/**
+	 * Returns the list of followers of the user.
+	 * 
+	 * @param username - The username of the user.
+	 * @return List of followers of the user.
+	 */
 	public List<TwitterUser> getFollowers(String username) {
 		String followersSQL = "select t3.* from user t3 inner join (select t2.follower_id from user t1 inner join followers t2 on t1.user_id = t2.followed_id where t1.username = :username) t4 on t3.user_id = t4.follower_id";
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -64,6 +94,12 @@ public class TwitterService {
 		return followersList;
 	}
 
+	/**
+	 * Returns the list of people being followed by the user 
+	 * 
+	 * @param username - The username of the user.
+	 * @return List of people being followed by the user.
+	 */
 	public List<TwitterUser> getFollowedUsers(String username) {
 		String followersSQL = "select t3.* from user t3 inner join (select t2.followed_id from user t1 inner join followers t2 on t1.user_id = t2.follower_id where t1.username = :username) t4 on t3.user_id = t4.followed_id";
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -72,6 +108,13 @@ public class TwitterService {
 		return followersList;
 	}
 
+	/**
+	 * Inserts an entry in the followers table when a user follows another. This operation
+	 * results in a user following another.
+	 * 
+	 * @param followingUser - The user following the followedUser.
+	 * @param followedUser - The user being followed.
+	 */
 	public void createFollowingRelationship(TwitterUser followingUser, TwitterUser followedUser) {
 		String createFollowingRelationshipSQL = "insert into followers (follower_id, followed_id) values (:followingUserId, :followedUserId)";
 		Map<String, Integer> paramMap = new HashMap<String, Integer>();
@@ -80,6 +123,13 @@ public class TwitterService {
 		twitterUserDAOImpl.create(createFollowingRelationshipSQL, paramMap);
 	}
 
+	/**
+	 * Deletes an entry from the followers table. This operations results in a user 
+	 * unfollowing another.
+	 * 
+	 * @param followingUser - The user following the followedUser.
+	 * @param followedUser - The user being followed.
+	 */
 	public void deleteFollowingRelationship(TwitterUser followingUser, TwitterUser followedUser) {
 		String createFollowingRelationshipSQL = "delete from followers where follower_id = :followingUserId "
 				+ "and followed_id = :followedUserId";

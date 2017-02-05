@@ -2,6 +2,12 @@ package com.twitter.spring.model;
 
 import java.sql.Date;
 
+/**
+ * The tweet entity representing the details of a tweet of the user.
+ * 
+ * @author niteshch
+ *
+ */
 public class Tweet {
 	private Integer tweetId;
 	private Integer userId;

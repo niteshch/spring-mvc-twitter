@@ -10,8 +10,14 @@ import org.springframework.stereotype.Component;
 
 import com.twitter.spring.model.TwitterUser;
 
+/**
+ * The class for performing CRUD operations on TwitterUser object.
+ * 
+ * @author niteshch
+ *
+ */
 @Component
-public class TwitterUserDAOImpl implements AppDAO<TwitterUser, String> {
+public class TwitterUserDAOImpl implements AppDAO<TwitterUser> {
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -24,6 +30,12 @@ public class TwitterUserDAOImpl implements AppDAO<TwitterUser, String> {
 		return namedParameterJdbcTemplate.update(sql, paramMap);
 	}
 	
+	/**
+	 * Reads a <code>TwitterUser</code> object. If no <code>TwitterUser</code> found, <code>null</code> is returned. 
+	 * 
+	 * @param sql - SQL used to query the <code>TwitterUser</code> object.
+	 * @param paramMap - Map containing parameters used by the SQL
+	 */
 	@Override
 	public TwitterUser read(String sql, Map<String, ?> paramMap) {
 		List<TwitterUser> outputList = namedParameterJdbcTemplate.query(sql, paramMap, twitterUserResultSetExtractor);
@@ -34,22 +46,26 @@ public class TwitterUserDAOImpl implements AppDAO<TwitterUser, String> {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.twitter.spring.dao.AppDAO#readList(java.lang.String, java.util.Map)
+	 */
 	@Override
 	public List<TwitterUser> readList(String sql, Map<String, ?> paramMap) {
 		List<TwitterUser> twitterUserList = namedParameterJdbcTemplate.query(sql, paramMap, twitterUserResultSetExtractor);
 		return twitterUserList;
 	}
 
-	@Override
-	public List<TwitterUser> readList(List<String> keyList) {
-		throw new UnsupportedOperationException("Read list of users based on list of keys is not supported");
-	}
-
+	/**
+	 * This operation is not supported by the DAO layer.
+	 */
 	@Override
 	public void update(String sql, Map<String, ?> paramMap) {
 		throw new UnsupportedOperationException("Update user is not supported");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.twitter.spring.dao.AppDAO#delete(java.lang.String, java.util.Map)
+	 */
 	@Override
 	public int delete(String sql, Map<String, ?> paramMap) {
 		return namedParameterJdbcTemplate.update(sql, paramMap);
