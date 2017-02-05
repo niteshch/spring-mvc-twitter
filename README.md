@@ -38,3 +38,5 @@ Following operations are exposed by this service:
 - Build the project using Maven.
 
 - Deploy the generated war file to the tomcat server.
+
+- Once deployed, the details of API can be found at [http://<server_url>/<context_root>/swagger-ui.html]([http://<server_url>/<context_root>/swagger-ui.html])
