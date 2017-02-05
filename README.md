@@ -12,6 +12,7 @@ Following operations are exposed by this service:
 1. Java 8
 2. Tomcat 8
 3. MySQL
+4. Maven
 
 # Setup
 - Use the `twitter_output.sql` file to import the MySQL dump of twitter data.
